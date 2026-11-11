@@ -1,0 +1,30 @@
+{
+  "name": "qox-software-bot",
+  "version": "1.0.0",
+  "description": "QOX Software AI Trading Terminal Mini App & Telegram License Automation Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start:prod": "node index.js",
+    "build": "npm --prefix client run build && npm --prefix bot run build",
+    "build:client": "npm --prefix client run build",
+    "build:bot": "npm --prefix bot run build",
+    "install:all": "npm --prefix client install && npm --prefix bot install",
+    "postinstall": "npm --prefix client install && npm --prefix bot install",
+    "dev:client": "npm --prefix client run dev",
+    "dev:bot": "npm --prefix bot run dev"
+  },
+  "keywords": [
+    "telegram-bot",
+    "pterodactyl",
+    "trading",
+    "quotex",
+    "crypto",
+    "mini-app"
+  ],
+  "author": "Bhavya Gupta",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}

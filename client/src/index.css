@@ -1,0 +1,545 @@
+:root {
+  /* Realistic, Natural High-End Typography (Anti-Robotic) */
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Vibrant Modern Neon-Emerald & Obsidian Luxury Palette */
+  --emerald-primary: #00ff88;       /* Vibrant luminous electric neon emerald */
+  --emerald-deep: #00bf63;          /* Deep rich neon emerald */
+  --emerald-soft: #4effa4;          /* Soft luminous neon highlight */
+  --emerald-neon: #00ff88;
+  --emerald-subtle: rgba(0, 255, 136, 0.14);
+  --emerald-border: rgba(0, 255, 136, 0.35);
+
+  --bg-deep: #050a07;               /* Deep obsidian slate with neon depth */
+  --bg-card: rgba(9, 18, 13, 0.92); /* Glass obsidian card */
+  --border-hairline: rgba(255, 255, 255, 0.09);
+  
+  --text-primary: #ffffff;          /* Crisp luxury white */
+  --text-secondary: #9cb3a8;        /* Natural titanium slate */
+  --text-muted: #64748b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+/* Luminous Neon Ambient Background Glow */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 136, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 50% 100%, rgba(0, 255, 136, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Luxury Obsidian Pricing Card */
+.plan-card {
+  position: relative;
+  background: linear-gradient(180deg, #0d1713 0%, #070d0a 100%);
+  border: 1px solid var(--border-hairline);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  padding: 22px 18px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease, box-shadow 0.22s ease;
+  z-index: 2;
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Featured / Coveted Card with Neon Border Accent */
+.plan-card-popular {
+  background: linear-gradient(180deg, #10241b 0%, #07100b 100%);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-top: 1.5px solid #00ff88;
+  box-shadow: 0 14px 40px -6px rgba(0, 0, 0, 0.9), 0 0 24px rgba(0, 255, 136, 0.16), inset 0 1px 0 rgba(0, 255, 136, 0.15);
+}
+
+/* Tactile physical hover with Neon Accent */
+.plan-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 255, 136, 0.4);
+  border-top-color: #00ff88;
+  box-shadow: 0 18px 42px -6px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 255, 136, 0.18);
+}
+
+/* Buttons */
+.btn-emerald-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.75rem, 2.5vw, 0.84rem);
+  letter-spacing: 0.03em;
+  padding: 12px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.btn-emerald-outline:hover {
+  border-color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
+}
+
+.btn-emerald-outline:active {
+  transform: scale(0.98);
+}
+
+.btn-emerald-solid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #00ff88 0%, #00cf69 100%);
+  color: #021208;
+  border: 1px solid rgba(0, 255, 136, 0.8);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(0.78rem, 2.6vw, 0.86rem);
+  letter-spacing: 0.03em;
+  padding: 12px 16px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-transform: uppercase;
+  box-shadow: 0 4px 18px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.btn-emerald-solid:hover {
+  background: linear-gradient(135deg, #33ff9e 0%, #00e073 100%);
+  box-shadow: 0 6px 24px rgba(0, 255, 136, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.btn-emerald-solid:active {
+  transform: scale(0.98);
+  filter: brightness(0.94);
+}
+
+/* Reviews Outer Container */
+.reviews-outer-frame {
+  position: relative;
+  background: #090e0c;
+  border: 1px solid var(--border-hairline);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 10px 8px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.95);
+  margin-bottom: 32px;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Reviews Vertical Ticker Mask & Track */
+.reviews-ticker-wrapper {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+.reviews-ticker-track {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: verticalTickerScroll 120s linear infinite;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reviews-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes verticalTickerScroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+/* Executive Review Card */
+.review-card {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #0d1512 0%, #070c0a 100%);
+  border: 1px solid var(--border-hairline);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px 14px;
+  box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.85);
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+
+.review-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+
+/* Slide Up Modal Animation */
+@keyframes slideUpModal {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slideUpModal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ========================================================
+   FUTURISTIC SCI-FI QUANTUM SCANNER STYLES & ANIMATIONS
+   ======================================================== */
+
+/* 1. Volumetric Dual-Direction Laser Sweep */
+@keyframes scifiLaserVertical {
+  0% {
+    top: 1%;
+    opacity: 0.85;
+  }
+  50% {
+    top: 96%;
+    opacity: 1;
+  }
+  100% {
+    top: 1%;
+    opacity: 0.85;
+  }
+}
+
+@keyframes scifiLaserHorizontal {
+  0% {
+    left: 2%;
+    opacity: 0.35;
+  }
+  50% {
+    left: 97%;
+    opacity: 0.75;
+  }
+  100% {
+    left: 2%;
+    opacity: 0.35;
+  }
+}
+
+/* Primary Horizontal Laser Line (Sweeps Vertically) */
+.scifi-laser-primary {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(16, 185, 129, 0.2) 10%, 
+    #10b981 30%, 
+    #34d399 45%, 
+    #ffffff 50%, 
+    #34d399 55%, 
+    #10b981 70%, 
+    rgba(16, 185, 129, 0.2) 90%, 
+    transparent 100%
+  );
+  box-shadow: 
+    0 0 6px #ffffff,
+    0 0 15px #34d399,
+    0 0 30px #10b981,
+    0 0 45px rgba(16, 185, 129, 0.8);
+  animation: scifiLaserVertical 1.8s ease-in-out infinite;
+  z-index: 12;
+  pointer-events: none;
+}
+
+/* Volumetric Holographic Light Veil Trailing The Primary Beam */
+.scifi-laser-veil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 38px;
+  margin-top: -38px;
+  background: linear-gradient(to top, 
+    rgba(16, 185, 129, 0.28) 0%, 
+    rgba(52, 211, 153, 0.12) 40%, 
+    transparent 100%
+  );
+  animation: scifiLaserVertical 1.8s ease-in-out infinite;
+  z-index: 11;
+  pointer-events: none;
+}
+
+/* Secondary Vertical Laser Line (Cross-Axis Sweep) */
+.scifi-laser-cross {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: linear-gradient(180deg, 
+    transparent 0%, 
+    rgba(52, 211, 153, 0.3) 25%, 
+    #ffffff 50%, 
+    rgba(52, 211, 153, 0.3) 75%, 
+    transparent 100%
+  );
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6), 0 0 20px rgba(16, 185, 129, 0.3);
+  animation: scifiLaserHorizontal 2.6s ease-in-out infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* 2. CRT Scanlines & Cyber Matrix Overlay */
+@keyframes scifiScanlinesScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 60px; }
+}
+
+.scifi-crt-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.18) 0px,
+    rgba(0, 0, 0, 0.18) 1.5px,
+    transparent 1.5px,
+    transparent 3.5px
+  );
+  animation: scifiScanlinesScroll 4s linear infinite;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0.85;
+}
+
+.scifi-cyber-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* 3. Concentric Gyroscope & Radar Sweeper */
+@keyframes scifiRotateCw {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes scifiRotateCcw {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.scifi-gyro-outer {
+  animation: scifiRotateCw 8s linear infinite;
+}
+
+.scifi-gyro-inner {
+  animation: scifiRotateCcw 5s linear infinite;
+}
+
+.scifi-radar-beam {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg, 
+    transparent 0deg, 
+    transparent 280deg, 
+    rgba(16, 185, 129, 0.45) 360deg
+  );
+  animation: scifiRotateCw 2.5s linear infinite;
+  pointer-events: none;
+}
+
+/* 4. Target Reticle Blinks */
+@keyframes scifiReticleLock {
+  0%, 100% {
+    border-color: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+    opacity: 0.9;
+  }
+  50% {
+    border-color: #34d399;
+    box-shadow: 0 0 18px rgba(52, 211, 153, 0.9);
+    opacity: 1;
+  }
+}
+
+.scifi-target-box {
+  animation: scifiReticleLock 1.2s ease-in-out infinite;
+}
+
+/* 5. Frequency Equalizer Bars (Market Frequency Visualizer) */
+@keyframes scifiBarBounce1 {
+  0%, 100% { height: 25%; }
+  50% { height: 95%; }
+}
+@keyframes scifiBarBounce2 {
+  0%, 100% { height: 65%; }
+  50% { height: 30%; }
+}
+@keyframes scifiBarBounce3 {
+  0%, 100% { height: 40%; }
+  50% { height: 85%; }
+}
+@keyframes scifiBarBounce4 {
+  0%, 100% { height: 85%; }
+  50% { height: 40%; }
+}
+
+.scifi-eq-bar-1 { animation: scifiBarBounce1 0.75s ease-in-out infinite; }
+.scifi-eq-bar-2 { animation: scifiBarBounce2 0.6s ease-in-out infinite; }
+.scifi-eq-bar-3 { animation: scifiBarBounce3 0.85s ease-in-out infinite; }
+.scifi-eq-bar-4 { animation: scifiBarBounce4 0.5s ease-in-out infinite; }
+
+/* 6. Subtle Cybernetic Glitch Filter */
+@keyframes scifiGlitchSweep {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { transform: translateY(15px); opacity: 0.15; }
+  20% { transform: translateY(45px); opacity: 0.25; }
+  30% { transform: translateY(90px); opacity: 0.05; }
+  40% { transform: translateY(130px); opacity: 0.2; }
+  50% { transform: translateY(180px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+.scifi-glitch-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: rgba(52, 211, 153, 0.2);
+  backdrop-filter: invert(0.15) hue-rotate(90deg);
+  animation: scifiGlitchSweep 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* Legacy Laser Scanner for compatibility */
+@keyframes laserScanSweep {
+  0% {
+    top: 2%;
+    opacity: 0.7;
+  }
+  50% {
+    top: 96%;
+    opacity: 1;
+  }
+  100% {
+    top: 2%;
+    opacity: 0.7;
+  }
+}
+
+.laser-scanner-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #10b981 20%, #34d399 50%, #10b981 80%, transparent);
+  box-shadow: 0 0 14px #10b981, 0 0 28px rgba(16, 185, 129, 0.8);
+  animation: laserScanSweep 1.5s ease-in-out infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.scanner-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Custom sleek scrollbar for modals & terminal */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.4);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.75);
+}
+
+
+@keyframes laserSweep {
+  0% {
+    left: -30%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: -30%;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}

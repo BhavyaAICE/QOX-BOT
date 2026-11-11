@@ -1,0 +1,83 @@
+export interface BotOwner {
+  slot: number;
+  id: string;
+  username: string;
+  label: string;
+}
+
+class OwnerStore {
+  /**
+   * Reads owners dynamically from process.env only.
+   * Configure them in bot/.env via:
+   * OWNER_TELEGRAM_ID / OWNER_USERNAME (Owner 1 - Primary)
+   * OWNER_2_ID / OWNER_2_USERNAME (Owner 2)
+   * OWNER_3_ID / OWNER_3_USERNAME (Owner 3)
+   * or comma-separated OWNER_IDS / OWNER_USERNAMES
+   */
+  public getOwners(): BotOwner[] {
+    const owner1Id = (process.env.OWNER_TELEGRAM_ID || "").trim();
+    const owner1User = (process.env.OWNER_USERNAME || "").replace(/^@/, "").trim().toLowerCase();
+
+    const owner2Id = (process.env.OWNER_2_ID || "").trim();
+    const owner2User = (process.env.OWNER_2_USERNAME || "").replace(/^@/, "").trim().toLowerCase();
+
+    const owner3Id = (process.env.OWNER_3_ID || "").trim();
+    const owner3User = (process.env.OWNER_3_USERNAME || "").replace(/^@/, "").trim().toLowerCase();
+
+    return [
+      { slot: 1, id: owner1Id, username: owner1User, label: "Owner 1 (Primary)" },
+      { slot: 2, id: owner2Id, username: owner2User, label: "Owner 2" },
+      { slot: 3, id: owner3Id, username: owner3User, label: "Owner 3" },
+    ];
+  }
+
+  public getAllOwnerIds(): string[] {
+    const list: string[] = [];
+    const addIf = (val?: string) => {
+      if (val && val.trim() && !list.includes(val.trim())) list.push(val.trim());
+    };
+
+    addIf(process.env.OWNER_TELEGRAM_ID);
+    addIf(process.env.OWNER_2_ID);
+    addIf(process.env.OWNER_3_ID);
+
+    if (process.env.OWNER_IDS) {
+      process.env.OWNER_IDS.split(",").forEach((id) => addIf(id));
+    }
+
+    return list;
+  }
+
+  public getAllOwnerUsernames(): string[] {
+    const list: string[] = [];
+    const addIf = (val?: string) => {
+      if (!val) return;
+      const clean = val.replace(/^@/, "").trim().toLowerCase();
+      if (clean && !list.includes(clean)) list.push(clean);
+    };
+
+    addIf(process.env.OWNER_USERNAME);
+    addIf(process.env.OWNER_2_USERNAME);
+    addIf(process.env.OWNER_3_USERNAME);
+
+    if (process.env.OWNER_USERNAMES) {
+      process.env.OWNER_USERNAMES.split(",").forEach((u) => addIf(u));
+    }
+
+    return list;
+  }
+
+  public isOwner(userId?: number | string, username?: string): boolean {
+    if (userId) {
+      const idStr = userId.toString().trim();
+      if (this.getAllOwnerIds().includes(idStr)) return true;
+    }
+    if (username) {
+      const clean = username.replace(/^@/, "").trim().toLowerCase();
+      if (clean && this.getAllOwnerUsernames().includes(clean)) return true;
+    }
+    return false;
+  }
+}
+
+export const ownerStore = new OwnerStore();

@@ -1,0 +1,26 @@
+{
+  "upi": {
+    "key": "upi",
+    "name": "PAY WITH UPI / QR",
+    "badge": "INR",
+    "enabled": true,
+    "disabledReason": "UPI / QR payment gateway is temporarily disabled by admin for routine banking maintenance. Please use Binance Pay or Trust Wallet, or contact admin support.",
+    "updatedAt": "2026-11-11T05:46:52.309Z"
+  },
+  "binance": {
+    "key": "binance",
+    "name": "PAY WITH BINANCE",
+    "badge": "USDT",
+    "enabled": true,
+    "disabledReason": "Binance Pay gateway is temporarily disabled by admin for system maintenance. Please use UPI / QR or Trust Wallet, or contact admin desk.",
+    "updatedAt": "2026-11-11T05:00:00.000Z"
+  },
+  "trust": {
+    "key": "trust",
+    "name": "PAY WITH TRUST WALLET",
+    "badge": "USDT",
+    "enabled": true,
+    "disabledReason": "Trust Wallet gateway is temporarily disabled by admin for node maintenance. Please use UPI / QR or Binance Pay, or contact admin desk.",
+    "updatedAt": "2026-11-11T05:00:00.000Z"
+  }
+}
