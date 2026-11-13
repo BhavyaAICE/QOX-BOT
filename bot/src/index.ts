@@ -108,6 +108,9 @@ async function notifyUpiSubmission(order: UpiOrderRecord) {
   // Notify Buyer with explicit notice that verification might take time
   if (order.telegramId) {
     const durText = order.durationDays === -1 ? "Permanent" : `${order.durationDays} Days`;
+    const buyerKeyboard = new InlineKeyboard()
+      .url("💬 Message Admin (@varshithofficial)", "https://t.me/varshithofficial");
+
     const buyerMsg =
       `<b>QOX SOFTWARE • UPI PAYMENT SUBMITTED</b>\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
@@ -115,13 +118,15 @@ async function notifyUpiSubmission(order: UpiOrderRecord) {
       `<b>Plan:</b> <b>${order.planTag}</b> (${durText})\n` +
       `<b>Amount:</b> ₹${inrDisplay} INR ($${order.priceUsdt} USD)\n` +
       `<b>Submitted UTR:</b> <code>${order.utr}</code>\n\n` +
-      `⏳ <b>VERIFICATION IN PROGRESS:</b>\n` +
-      `<i>Please note that verification might take time (typically 5 to 15 minutes) as our compliance desk manually confirms the bank statement credit.</i>\n\n` +
-      `Once approved, your official <b>User ID & Password</b> will be sent right here in this chat immediately.`;
+      `⏳ <b>ACTION REQUIRED FOR LOGIN APPROVAL:</b>\n` +
+      `Please message our approval admin directly on Telegram:\n` +
+      `👉 <b>Admin:</b> @varshithofficial\n\n` +
+      `<i>Send your Order ID <code>#${order.orderId}</code> or payment receipt screenshot to @varshithofficial to confirm your funds and receive your User ID & Password.</i>`;
 
     try {
       await bot.api.sendMessage(order.telegramId, buyerMsg, {
         parse_mode: "HTML",
+        reply_markup: buyerKeyboard,
       });
     } catch (err) {
       console.error("[UPI] Failed to message buyer:", err);
@@ -160,17 +165,24 @@ async function notifyQueryRaised(query: {
 
   // Also confirm receipt to Buyer
   if (query.telegramId) {
+    const buyerKeyboard = new InlineKeyboard()
+      .url("💬 Message Admin (@varshithofficial)", "https://t.me/varshithofficial");
+
     const buyerMsg =
       `<b>QOX SOFTWARE • ACTIVATION QUERY RECEIVED</b>\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `<b>Order ID:</b> <code>#${query.orderId}</code>\n` +
       `<b>Plan:</b> <b>${query.planTag}</b>\n` +
       `<b>Reference:</b> <code>${query.txRef}</code>\n\n` +
-      `Your query has been dispatched directly to the Administrator desk.\n` +
-      `Once verified, your official <b>User ID & Password</b> will be sent right here in this chat.`;
+      `Your query has been dispatched directly to the Administrator desk.\n\n` +
+      `👉 <b>Contact Approval Admin:</b> @varshithofficial\n` +
+      `<i>Please DM @varshithofficial with your Order ID or payment receipt to get your User ID & Password approved.</i>`;
 
     try {
-      await bot.api.sendMessage(query.telegramId, buyerMsg, { parse_mode: "HTML" });
+      await bot.api.sendMessage(query.telegramId, buyerMsg, {
+        parse_mode: "HTML",
+        reply_markup: buyerKeyboard,
+      });
     } catch (err) {
       console.error("[QUERY] Failed to message buyer:", err);
     }
@@ -266,10 +278,10 @@ bot.command("start", async (ctx) => {
       `• <b>GRANDMASTER</b> — Lifetime Permanent ($500 USD / ₹45,000 INR)\n\n` +
       `<b>HOW LOGIN ACTIVATION WORKS:</b>\n` +
       `1. Tap <b>Purchase License</b> to choose your plan and complete payment.\n` +
-      `2. Raise a query to the Admin right from the purchase screen.\n` +
-      `3. Admin confirms payment on bank statement and generates your official <b>User ID & Password</b>.\n` +
-      `4. Admin delivers your private <b>Software Terminal Link</b> directly to this chat!\n\n` +
-      `<i>Need help? Type /contact</i>`,
+      `2. Contact Admin <b>@varshithofficial</b> with your Order ID or transfer proof.\n` +
+      `3. Admin confirms payment on bank statement and issues your official <b>User ID & Password</b>.\n` +
+      `4. Unlock your private <b>Software Terminal Link</b> immediately!\n\n` +
+      `<i>Need help? Type /contact or message @varshithofficial</i>`,
     {
       parse_mode: "HTML",
       reply_markup: keyboard,
@@ -326,12 +338,14 @@ bot.command(["plans", "shop", "buy"], async (ctx) => {
 
 // Command: /contact
 bot.command("contact", async (ctx) => {
+  const keyboard = new InlineKeyboard().url("💬 Message Admin (@varshithofficial)", "https://t.me/varshithofficial");
   await ctx.reply(
-    "<b>QOX OFFICIAL SUPPORT DESK</b>\n\n" +
-      "For software activation, payment queries, or VIP OTC licenses:\n" +
-      "• Message Admin Desk directly\n" +
+    "<b>QOX OFFICIAL SUPPORT & VERIFICATION DESK</b>\n\n" +
+      "For software activation, payment approvals, or login assistance:\n" +
+      "• <b>Approval Admin:</b> @varshithofficial\n" +
+      "• Tap the button below to message our admin directly on Telegram\n" +
       "• Type /myaccount to retrieve your issued credentials",
-    { parse_mode: "HTML" }
+    { parse_mode: "HTML", reply_markup: keyboard }
   );
 });
 

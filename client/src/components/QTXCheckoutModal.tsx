@@ -283,7 +283,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
   const handleOpenAdminChat = () => {
     haptic("light");
     sounds.playClick();
-    const link = `https://t.me/test4925bot?start=query_${orderId}`;
+    const link = "https://t.me/varshithofficial";
     if (tg?.openTelegramLink) {
       tg.openTelegramLink(link);
     } else {
@@ -299,14 +299,15 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
         ? `₹${getPlanInrAmount(plan).toLocaleString()} INR ($${plan.price} USD)`
         : `$${plan.price} USD`;
     const text =
-      `QOX PAYMENT QUERY:\n` +
+      `QOX PAYMENT VERIFICATION QUERY:\n` +
       `Order ID: #${orderId}\n` +
       `Plan: ${plan.tag} (${plan.duration})\n` +
       `Amount: ${calculatedAmountText}\n` +
       `Method: ${selectedMethod.toUpperCase()}\n` +
       `Reference / UTR / TxID: ${utr || txId}\n` +
       `Trader: @${user?.username || "Trader"}\n` +
-      `Request: Please confirm my payment and issue my QOX Software Terminal Login ID & Password.`;
+      `Official Admin: @varshithofficial\n` +
+      `Request: I have completed the payment. Please verify my credit and approve my QOX Software Terminal User ID & Password.`;
     navigator.clipboard.writeText(text);
     setCopiedQuery(true);
     setTimeout(() => setCopiedQuery(false), 2500);
@@ -1673,9 +1674,51 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
               PAYMENT SUBMITTED · ACTION REQUIRED
             </h3>
 
-            <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: "0 auto 14px", maxWidth: "340px", lineHeight: 1.45 }}>
-              Please raise a verification query to Admin or contact Admin directly to verify your transfer and receive your official Software Terminal Login ID & Password.
+            <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: "0 auto 12px", maxWidth: "340px", lineHeight: 1.45 }}>
+              Please message Admin <b style={{ color: "#00ff88" }}>@varshithofficial</b> directly on Telegram with your Order ID to get your Software Terminal User ID & Password approved.
             </p>
+
+            {/* Official Admin Contact Card */}
+            <div style={{
+              padding: "11px 14px",
+              backgroundColor: "rgba(16, 185, 129, 0.08)",
+              border: "1.5px solid rgba(16, 185, 129, 0.4)",
+              borderRadius: "10px",
+              marginBottom: "14px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              textAlign: "left",
+            }}>
+              <div>
+                <div style={{ fontSize: "0.64rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 700 }}>
+                  Official Approval Admin
+                </div>
+                <div style={{ fontSize: "0.95rem", color: "#ffffff", fontWeight: 900, fontFamily: "var(--font-mono)", marginTop: "2px" }}>
+                  @varshithofficial
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleOpenAdminChat}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  padding: "7px 14px",
+                  backgroundColor: "var(--emerald-primary)",
+                  color: "#000000",
+                  borderRadius: "6px",
+                  fontSize: "0.76rem",
+                  fontWeight: 800,
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                <Send size={13} />
+                <span>DM ADMIN</span>
+              </button>
+            </div>
 
             {/* Verification Time Note */}
             <div style={{
@@ -1778,7 +1821,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
                 }}
               >
                 <Send size={15} />
-                <span>CONTACT ADMIN ON TELEGRAM</span>
+                <span>MESSAGE ADMIN (@varshithofficial)</span>
               </button>
 
               {/* Secondary: 1-Tap Raise Query */}
