@@ -109,7 +109,7 @@ async function notifyUpiSubmission(order: UpiOrderRecord) {
   if (order.telegramId) {
     const durText = order.durationDays === -1 ? "Permanent" : `${order.durationDays} Days`;
     const buyerKeyboard = new InlineKeyboard()
-      .url("💬 👑 Message Admin (@qoxking) ⚡", "https://t.me/qoxking");
+      .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
 
     const buyerMsg =
       `<b>QOX SOFTWARE • UPI PAYMENT SUBMITTED</b>\n` +
@@ -118,9 +118,9 @@ async function notifyUpiSubmission(order: UpiOrderRecord) {
       `<b>Plan:</b> <b>${order.planTag}</b> (${durText})\n` +
       `<b>Amount:</b> ₹${inrDisplay} INR ($${order.priceUsdt} USD)\n` +
       `<b>Submitted UTR:</b> <code>${order.utr}</code>\n\n` +
-      `⏳ <b>ACTION REQUIRED FOR LOGIN APPROVAL:</b>\n` +
+      `<b>ACTION REQUIRED FOR LOGIN APPROVAL:</b>\n` +
       `Please message our approval admin directly on Telegram:\n` +
-      `👉 <b>Admin:</b> @qoxking\n\n` +
+      `Admin: <b>@qoxking</b>\n\n` +
       `<i>Send your Order ID <code>#${order.orderId}</code> or payment receipt screenshot to @qoxking to confirm your funds and receive your User ID & Password.</i>`;
 
     try {
@@ -145,11 +145,11 @@ async function notifyQueryRaised(query: {
   telegramUsername?: string;
 }) {
   const ownerKeyboard = new InlineKeyboard()
-    .text("✅ Confirm & Issue Login", `approve_query:${query.orderId}`)
-    .text("❌ Reject", `reject_query:${query.orderId}`);
+    .text("Approve & Issue Login", `approve_query:${query.orderId}`).success()
+    .text("Reject", `reject_query:${query.orderId}`).danger();
 
   const ownerMsg =
-    `<b>🔔 NEW PURCHASE QUERY RAISED BY TRADER</b>\n` +
+    `<b>NEW PURCHASE QUERY RAISED BY TRADER</b>\n` +
     `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
     `<b>Order ID:</b> <code>#${query.orderId}</code>\n` +
     `<b>Plan:</b> <b>${query.planTag}</b>\n` +
@@ -166,7 +166,7 @@ async function notifyQueryRaised(query: {
   // Also confirm receipt to Buyer
   if (query.telegramId) {
     const buyerKeyboard = new InlineKeyboard()
-      .url("💬 👑 Message Admin (@qoxking) ⚡", "https://t.me/qoxking");
+      .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
 
     const buyerMsg =
       `<b>QOX SOFTWARE • ACTIVATION QUERY RECEIVED</b>\n` +
@@ -175,7 +175,7 @@ async function notifyQueryRaised(query: {
       `<b>Plan:</b> <b>${query.planTag}</b>\n` +
       `<b>Reference:</b> <code>${query.txRef}</code>\n\n` +
       `Your query has been dispatched directly to the Administrator desk.\n\n` +
-      `👉 <b>Contact Approval Admin:</b> @qoxking\n` +
+      `Contact Approval Admin: <b>@qoxking</b>\n` +
       `<i>Please DM @qoxking with your Order ID or payment receipt to get your User ID & Password approved.</i>`;
 
     try {
@@ -250,22 +250,24 @@ bot.command("start", async (ctx) => {
   const terminalAppUrl = `${webAppUrl}?app=terminal`;
 
   const keyboard = new InlineKeyboard()
-    .webApp("🟢 🛒 PURCHASE VIP ACCESS / LICENSE 💎", storeAppUrl);
+    .webApp("TAP AND BUY QOX SOFTWARE", storeAppUrl).success()
+    .row();
 
   // Strictly gate the Software Terminal link: only show if user is owner or approved subscriber
   if (isUserOwner || activeLicense) {
-    keyboard.row().webApp("🔥 ⚡ LAUNCH AI SOFTWARE TERMINAL 🚀", terminalAppUrl);
+    keyboard.webApp("LAUNCH SOFTWARE TERMINAL", terminalAppUrl).primary().row();
+  } else {
+    keyboard.url("OPEN STORE IN BROWSER", storeAppUrl).primary().row();
   }
 
-  keyboard.row().url("🌐 💎 OPEN STORE IN BROWSER ↗️", storeAppUrl);
-  keyboard.row().url("👑 💬 CONTACT ADMIN (@qoxking) ⚡", "https://t.me/qoxking");
+  keyboard.url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
 
   let statusInfo = "";
   if (activeLicense) {
     statusInfo = `\n<b>YOUR ACCOUNT STATUS:</b> <code>ACTIVE (${activeLicense.planTag})</code>\n` +
       `User ID: <code>${activeLicense.userId}</code> | Type /myaccount for full details.\n`;
   } else if (!isUserOwner) {
-    statusInfo = `\n🔒 <i>Note: The Software Terminal is a private application. Access links and login credentials are provided exclusively by the Bot Owner upon payment confirmation.</i>\n`;
+    statusInfo = `\n<i>Note: The Software Terminal is a private application. Access links and login credentials are provided exclusively by the Bot Owner upon payment confirmation.</i>\n`;
   }
 
   await ctx.reply(
@@ -278,7 +280,7 @@ bot.command("start", async (ctx) => {
       `• <b>ENLIGHTENED</b> — 1 Month ($300 USD / ₹27,000 INR) [MOST COVETED]\n` +
       `• <b>GRANDMASTER</b> — Lifetime Permanent ($500 USD / ₹45,000 INR)\n\n` +
       `<b>HOW LOGIN ACTIVATION WORKS:</b>\n` +
-      `1. Tap <b>PURCHASE ACCESS</b> to choose your plan and complete payment.\n` +
+      `1. Tap <b>TAP AND BUY QOX SOFTWARE</b> to choose your plan and complete payment.\n` +
       `2. Contact Admin <b>@qoxking</b> with your Order ID or transfer proof.\n` +
       `3. Admin confirms payment on bank statement and issues your official <b>User ID & Password</b>.\n` +
       `4. Unlock your private <b>Software Terminal Link</b> immediately!\n\n` +
@@ -300,12 +302,15 @@ bot.command("terminal", async (ctx) => {
 
   if (!isUserOwner && !activeLicense) {
     await ctx.reply(
-      `<b>🔒 ACCESS RESTRICTED</b>\n\n` +
+      `<b>ACCESS RESTRICTED</b>\n\n` +
         `The QOX Software Terminal link is private and shared exclusively by the Bot Owner upon payment verification.\n\n` +
         `To acquire access, tap below to view plans and complete payment:`,
       {
         parse_mode: "HTML",
-        reply_markup: new InlineKeyboard().webApp("🛒 Purchase Access Plan", webAppUrl),
+        reply_markup: new InlineKeyboard()
+          .webApp("TAP AND BUY QOX SOFTWARE", webAppUrl).success()
+          .row()
+          .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger(),
       }
     );
     return;
@@ -313,9 +318,9 @@ bot.command("terminal", async (ctx) => {
 
   const terminalAppUrl = `${webAppUrl}?app=terminal`;
   const keyboard = new InlineKeyboard()
-    .webApp("🔥 ⚡ LAUNCH AI SOFTWARE TERMINAL 🚀", terminalAppUrl)
+    .webApp("LAUNCH SOFTWARE TERMINAL", terminalAppUrl).primary()
     .row()
-    .url("🌐 💎 OPEN IN WEB BROWSER ↗️", terminalAppUrl);
+    .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
 
   await ctx.reply(
     `<b>QOX SOFTWARE TERMINAL (AUTHORIZED ACCESS)</b>\n\n` +
@@ -331,7 +336,10 @@ bot.command("terminal", async (ctx) => {
 // Command: /plans
 bot.command(["plans", "shop", "buy"], async (ctx) => {
   const storeAppUrl = webAppUrl;
-  const keyboard = new InlineKeyboard().webApp("🟢 🛒 REVIEW ACCESS PLANS & BUY 💎", storeAppUrl);
+  const keyboard = new InlineKeyboard()
+    .webApp("TAP AND BUY QOX SOFTWARE", storeAppUrl).success()
+    .row()
+    .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
   await ctx.reply("Select an option to review access plans & purchase:", {
     reply_markup: keyboard,
   });
@@ -339,7 +347,8 @@ bot.command(["plans", "shop", "buy"], async (ctx) => {
 
 // Command: /contact
 bot.command("contact", async (ctx) => {
-  const keyboard = new InlineKeyboard().url("👑 💬 Message Admin (@qoxking) ⚡", "https://t.me/qoxking");
+  const keyboard = new InlineKeyboard()
+    .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
   await ctx.reply(
     "<b>QOX OFFICIAL SUPPORT & VERIFICATION DESK</b>\n\n" +
       "For software activation, payment approvals, or login assistance:\n" +
@@ -368,7 +377,10 @@ bot.command(["myaccount", "mykey", "credentials", "login", "account"], async (ct
         "3. Your unique User ID & Password will be generated immediately and sent to you here.",
       {
         parse_mode: "HTML",
-        reply_markup: new InlineKeyboard().webApp("🟢 🛒 Purchase Access Plan 💎", webAppUrl),
+        reply_markup: new InlineKeyboard()
+          .webApp("TAP AND BUY QOX SOFTWARE", webAppUrl).success()
+          .row()
+          .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger(),
       }
     );
     return;
@@ -383,13 +395,13 @@ bot.command(["myaccount", "mykey", "credentials", "login", "account"], async (ct
     text += `Status: ${lic.status}\n\n`;
   }
   text += `<i>Tap any User ID or Password above to copy it with one tap.</i>\n\n`;
-  text += `💡 <b>Want to customize your password?</b>\nType: <code>/setpassword &lt;new_password&gt;</code>`;
+  text += `<b>Want to customize your password?</b>\nType: <code>/setpassword &lt;new_password&gt;</code>`;
 
   const terminalAppUrl = `${webAppUrl}?app=terminal`;
   const keyboard = new InlineKeyboard()
-    .webApp("🔥 ⚡ LAUNCH SOFTWARE TERMINAL 🚀", terminalAppUrl)
+    .webApp("LAUNCH SOFTWARE TERMINAL", terminalAppUrl).primary()
     .row()
-    .url("🌐 💎 OPEN IN WEB BROWSER ↗️", terminalAppUrl);
+    .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
 
   await ctx.reply(text, { parse_mode: "HTML", reply_markup: keyboard });
 });
@@ -534,11 +546,11 @@ bot.command(["shareterminal", "sendlink"], async (ctx) => {
     if (targetId) {
       try {
         const msg =
-          `<b>🎉 QOX SOFTWARE TERMINAL • OFFICIAL ACCESS ISSUED</b>\n` +
+          `<b>QOX SOFTWARE TERMINAL • OFFICIAL ACCESS ISSUED</b>\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
           `The Bot Owner has authorized your access to the dedicated QOX AI Software Terminal.\n\n` +
           `<b>Private Terminal Link:</b>\n` +
-          `🔗 <code>${terminalAppUrl}</code>\n\n` +
+          `<code>${terminalAppUrl}</code>\n\n` +
           `<b>How to Start:</b>\n` +
           `1. Tap the button below to launch your terminal.\n` +
           `2. Log in with your issued User ID and Password.\n` +
@@ -548,9 +560,9 @@ bot.command(["shareterminal", "sendlink"], async (ctx) => {
         await bot.api.sendMessage(targetId, msg, {
           parse_mode: "HTML",
           reply_markup: new InlineKeyboard()
-            .webApp("⚡ Launch Software Terminal", terminalAppUrl)
+            .webApp("LAUNCH SOFTWARE TERMINAL", terminalAppUrl).primary()
             .row()
-            .url("Open in Web Browser", terminalAppUrl),
+            .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger(),
         });
 
         await ctx.reply(`<b>Success:</b> Terminal link dispatched directly to ${targetDisplay} (<code>${targetId}</code>)`, {
@@ -589,7 +601,7 @@ bot.command(["shareterminal", "sendlink"], async (ctx) => {
   await ctx.reply(shareText, {
     parse_mode: "HTML",
     reply_markup: new InlineKeyboard()
-      .webApp("⚡ Test Open Terminal", terminalAppUrl)
+      .webApp("TEST OPEN TERMINAL", terminalAppUrl).primary()
       .row()
       .text("Back to Admin Overview", "admin_refresh"),
   });
@@ -874,7 +886,7 @@ bot.callbackQuery("admin_share_terminal", async (ctx) => {
   await ctx.editMessageText(shareText, {
     parse_mode: "HTML",
     reply_markup: new InlineKeyboard()
-      .webApp("⚡ Test Open Terminal", terminalAppUrl)
+      .webApp("TEST OPEN TERMINAL", terminalAppUrl).primary()
       .row()
       .text("Back to Admin Overview", "admin_refresh"),
   });
@@ -987,7 +999,7 @@ bot.callbackQuery(/^approve_upi:(.+)$/, async (ctx) => {
   // Send credentials to Buyer
   if (order.telegramId) {
     const buyerCredentialsMsg =
-      `<b>🎉 QOX SOFTWARE • PAYMENT APPROVED & ACTIVATED!</b>\n` +
+      `<b>QOX SOFTWARE • PAYMENT APPROVED & ACTIVATED!</b>\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `Activation ID: <code>#${order.orderId}</code>\n` +
       `Plan: <b>${newLic.planTag}</b>\n` +
@@ -1005,9 +1017,9 @@ bot.callbackQuery(/^approve_upi:(.+)$/, async (ctx) => {
 
     const terminalAppUrl = `${webAppUrl}?app=terminal`;
     const launchKeyboard = new InlineKeyboard()
-      .webApp("🔥 ⚡ LAUNCH AI SOFTWARE TERMINAL 🚀", terminalAppUrl)
+      .webApp("LAUNCH SOFTWARE TERMINAL", terminalAppUrl).primary()
       .row()
-      .url("🌐 💎 OPEN IN WEB BROWSER ↗️", terminalAppUrl);
+      .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
 
     try {
       await bot.api.sendMessage(order.telegramId, buyerCredentialsMsg, {
@@ -1092,7 +1104,7 @@ bot.callbackQuery(/^approve_query:(.+)$/, async (ctx) => {
   if (buyerId) {
     const terminalAppUrl = `${webAppUrl}?app=terminal`;
     const buyerCredentialsMsg =
-      `<b>🎉 QOX SOFTWARE • PAYMENT CONFIRMED BY ADMIN!</b>\n` +
+      `<b>QOX SOFTWARE • PAYMENT CONFIRMED BY ADMIN!</b>\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `Order: <code>#${orderId}</code>\n` +
       `Plan: <b>${newLic.planTag}</b>\n` +
@@ -1109,9 +1121,9 @@ bot.callbackQuery(/^approve_query:(.+)$/, async (ctx) => {
       `<i>Tip: Retrieve your login details anytime by typing /myaccount</i>`;
 
     const launchKeyboard = new InlineKeyboard()
-      .webApp("🔥 ⚡ LAUNCH AI SOFTWARE TERMINAL 🚀", terminalAppUrl)
+      .webApp("LAUNCH SOFTWARE TERMINAL", terminalAppUrl).primary()
       .row()
-      .url("🌐 💎 OPEN IN WEB BROWSER ↗️", terminalAppUrl);
+      .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
 
     try {
       await bot.api.sendMessage(buyerId, buyerCredentialsMsg, {
@@ -1408,15 +1420,15 @@ bot.on("message:web_app_data", async (ctx) => {
       `<i>Tip: Retrieve your login details anytime by typing /myaccount</i>`;
 
     const launchKeyboard = new InlineKeyboard()
-      .webApp("Launch Software Terminal", `${webAppUrl}?app=terminal`)
+      .webApp("LAUNCH SOFTWARE TERMINAL", `${webAppUrl}?app=terminal`).primary()
       .row()
-      .url("Open in Desktop Browser", `${webAppUrl}?app=terminal`);
+      .url("CONTACT ADMIN (@QOXKING)", "https://t.me/qoxking").danger();
 
     await ctx.reply(receiptMessage, { parse_mode: "HTML", reply_markup: launchKeyboard });
 
     // Notify ALL 3 Owners
     await notifyAllOwners(
-      `<b>🎉 NEW SUBSCRIPTION SALE</b>\n\n` +
+      `<b>NEW SUBSCRIPTION SALE</b>\n\n` +
         `Trader: @${savedLicense.telegramUsername} (ID: <code>${ctx.from?.id}</code>)\n` +
         `Plan: ${savedLicense.planTag} (${data.duration || "10 DAYS"})\n` +
         `Paid: $${data.price} USDT\n` +

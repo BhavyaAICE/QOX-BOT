@@ -2364,9 +2364,18 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
                   handleOpenAdminChat();
                 }}
                 className="btn-emerald-outline"
-                style={{ width: "100%", padding: "10px", fontSize: "0.80rem" }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  fontSize: "0.80rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                }}
               >
-                💬 CONTACT ADMIN DESK ON TELEGRAM
+                <Send size={13} />
+                <span>CONTACT ADMIN DESK (@qoxking)</span>
               </button>
             </div>
           </div>

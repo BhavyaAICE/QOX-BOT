@@ -19,9 +19,9 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, onSelectPlan }) => {
   const isGrandmaster = plan.tag === "GRANDMASTER";
 
   const getTierBadge = () => {
-    if (isEnlightened) return "🔥 MOST POPULAR · 78% OF TRADERS CHOOSE THIS";
-    if (isGrandmaster) return "👑 PERMANENT LIFETIME ALLOCATION";
-    return "⚡ TACTICAL 10-DAY STARTER PASS";
+    if (isEnlightened) return "MOST POPULAR · 78% OF TRADERS CHOOSE THIS";
+    if (isGrandmaster) return "PERMANENT LIFETIME ALLOCATION";
+    return "TACTICAL 10-DAY STARTER PASS";
   };
 
   const getDailyRateText = () => {
