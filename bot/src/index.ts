@@ -90,7 +90,7 @@ async function notifyUpiSubmission(order: UpiOrderRecord) {
     .text("❌ Reject", `reject_upi:${order.orderId}`);
 
   const durText = order.durationDays === -1 ? "Permanent Lifetime" : `${order.durationDays} Days`;
-  const inrDisplay = (order.amountInr ?? (order.planTag === "INITIATE" ? 20000 : order.priceUsdt * 90)).toLocaleString();
+  const inrDisplay = (order.amountInr ?? (order.planTag === "INITIATE" ? 20000 : order.planTag === "ENLIGHTENED" ? 30000 : order.priceUsdt * 100)).toLocaleString();
   const ownerMsg =
     `<b>🔔 NEW UPI PAYMENT SUBMITTED</b>\n` +
     `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
@@ -277,8 +277,8 @@ bot.command("start", async (ctx) => {
       statusInfo + `\n` +
       `<b>AVAILABLE ACCESS PLANS:</b>\n` +
       `• <b>INITIATE</b> — 10 Days ($200 USD / ₹20,000 INR)\n` +
-      `• <b>ENLIGHTENED</b> — 1 Month ($300 USD / ₹27,000 INR) [MOST COVETED]\n` +
-      `• <b>GRANDMASTER</b> — Lifetime Permanent ($500 USD / ₹45,000 INR)\n\n` +
+      `• <b>ENLIGHTENED</b> — 1 Month ($300 USD / ₹30,000 INR) [MOST COVETED]\n` +
+      `• <b>GRANDMASTER</b> — Lifetime Permanent ($500 USD / ₹50,000 INR)\n\n` +
       `<b>HOW LOGIN ACTIVATION WORKS:</b>\n` +
       `1. Tap <b>TAP AND BUY QOX SOFTWARE</b> to choose your plan and complete payment.\n` +
       `2. Contact Admin <b>@qoxking</b> with your Order ID or transfer proof.\n` +

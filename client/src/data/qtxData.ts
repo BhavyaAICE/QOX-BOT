@@ -30,7 +30,7 @@
       tag: "ENLIGHTENED",
       duration: "1 MONTH",
       price: 300,
-      inrPrice: 27000,
+      inrPrice: 30000,
       buttonText: "ACCEPT INITIATION",
       isPopular: true,
       features: [
@@ -46,7 +46,7 @@
       tag: "GRANDMASTER",
       duration: "PERMANENT",
       price: 500,
-      inrPrice: 45000,
+      inrPrice: 50000,
       buttonText: "BEGIN JOURNEY",
       features: [
         "Unlimited Signals Daily",
@@ -78,7 +78,7 @@
     // UPI Configuration (Google Pay / PhonePe / Paytm / BHIM)
     upiId: "qoxsoftware@okhdfcbank",
     upiName: "QOX Software",
-    usdToInrRate: 90, // Standard OTC exchange rate ($1 = ₹90)
+    usdToInrRate: 100, // Standard OTC exchange rate ($1 = ₹100)
     // Official Direct Quotex Server Gateway (Synchronized Broker Portal)
     quotexPortalUrl: "https://broker-qx.pro/sign-up/?lid=2421270",
   };
