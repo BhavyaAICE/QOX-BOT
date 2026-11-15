@@ -471,11 +471,11 @@ export const SoftwareTerminal: React.FC<SoftwareTerminalProps> = ({
     }
   };
 
-  // Open Telegram Bot to retrieve lost credentials
+  // Open Telegram Bot / Admin to retrieve lost credentials
   const handleOpenBot = () => {
     sounds.playClick();
     haptic("light");
-    const link = "https://t.me/test4925bot?start=myaccount";
+    const link = "https://t.me/qoxking";
     if (tg?.openTelegramLink) {
       tg.openTelegramLink(link);
     } else {

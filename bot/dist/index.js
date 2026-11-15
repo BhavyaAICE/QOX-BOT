@@ -137,7 +137,7 @@ async function notifyUpiSubmission(order) {
     if (order.telegramId) {
         const durText = order.durationDays === -1 ? "Permanent" : `${order.durationDays} Days`;
         const buyerKeyboard = new grammy_1.InlineKeyboard()
-            .url("💬 Message Admin (@varshithofficial)", "https://t.me/varshithofficial");
+            .url("💬 👑 Message Admin (@qoxking) ⚡", "https://t.me/qoxking");
         const buyerMsg = `<b>QOX SOFTWARE • UPI PAYMENT SUBMITTED</b>\n` +
             `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
             `<b>Order ID:</b> <code>#${order.orderId}</code>\n` +
@@ -146,8 +146,8 @@ async function notifyUpiSubmission(order) {
             `<b>Submitted UTR:</b> <code>${order.utr}</code>\n\n` +
             `⏳ <b>ACTION REQUIRED FOR LOGIN APPROVAL:</b>\n` +
             `Please message our approval admin directly on Telegram:\n` +
-            `👉 <b>Admin:</b> @varshithofficial\n\n` +
-            `<i>Send your Order ID <code>#${order.orderId}</code> or payment receipt screenshot to @varshithofficial to confirm your funds and receive your User ID & Password.</i>`;
+            `👉 <b>Admin:</b> @qoxking\n\n` +
+            `<i>Send your Order ID <code>#${order.orderId}</code> or payment receipt screenshot to @qoxking to confirm your funds and receive your User ID & Password.</i>`;
         try {
             await bot.api.sendMessage(order.telegramId, buyerMsg, {
                 parse_mode: "HTML",
@@ -179,15 +179,15 @@ async function notifyQueryRaised(query) {
     // Also confirm receipt to Buyer
     if (query.telegramId) {
         const buyerKeyboard = new grammy_1.InlineKeyboard()
-            .url("💬 Message Admin (@varshithofficial)", "https://t.me/varshithofficial");
+            .url("💬 👑 Message Admin (@qoxking) ⚡", "https://t.me/qoxking");
         const buyerMsg = `<b>QOX SOFTWARE • ACTIVATION QUERY RECEIVED</b>\n` +
             `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
             `<b>Order ID:</b> <code>#${query.orderId}</code>\n` +
             `<b>Plan:</b> <b>${query.planTag}</b>\n` +
             `<b>Reference:</b> <code>${query.txRef}</code>\n\n` +
             `Your query has been dispatched directly to the Administrator desk.\n\n` +
-            `👉 <b>Contact Approval Admin:</b> @varshithofficial\n` +
-            `<i>Please DM @varshithofficial with your Order ID or payment receipt to get your User ID & Password approved.</i>`;
+            `👉 <b>Contact Approval Admin:</b> @qoxking\n` +
+            `<i>Please DM @qoxking with your Order ID or payment receipt to get your User ID & Password approved.</i>`;
         try {
             await bot.api.sendMessage(query.telegramId, buyerMsg, {
                 parse_mode: "HTML",
@@ -253,12 +253,13 @@ bot.command("start", async (ctx) => {
     const storeAppUrl = webAppUrl;
     const terminalAppUrl = `${webAppUrl}?app=terminal`;
     const keyboard = new grammy_1.InlineKeyboard()
-        .webApp("🛒 Purchase License / Access", storeAppUrl);
+        .webApp("🟢 🛒 PURCHASE VIP ACCESS / LICENSE 💎", storeAppUrl);
     // Strictly gate the Software Terminal link: only show if user is owner or approved subscriber
     if (isUserOwner || activeLicense) {
-        keyboard.row().webApp("⚡ Launch Software Terminal", terminalAppUrl);
+        keyboard.row().webApp("🔥 ⚡ LAUNCH AI SOFTWARE TERMINAL 🚀", terminalAppUrl);
     }
-    keyboard.row().url("Open Store in Browser", storeAppUrl);
+    keyboard.row().url("🌐 💎 OPEN STORE IN BROWSER ↗️", storeAppUrl);
+    keyboard.row().url("👑 💬 CONTACT ADMIN (@qoxking) ⚡", "https://t.me/qoxking");
     let statusInfo = "";
     if (activeLicense) {
         statusInfo = `\n<b>YOUR ACCOUNT STATUS:</b> <code>ACTIVE (${activeLicense.planTag})</code>\n` +
@@ -276,11 +277,11 @@ bot.command("start", async (ctx) => {
         `• <b>ENLIGHTENED</b> — 1 Month ($300 USD / ₹27,000 INR) [MOST COVETED]\n` +
         `• <b>GRANDMASTER</b> — Lifetime Permanent ($500 USD / ₹45,000 INR)\n\n` +
         `<b>HOW LOGIN ACTIVATION WORKS:</b>\n` +
-        `1. Tap <b>Purchase License</b> to choose your plan and complete payment.\n` +
-        `2. Contact Admin <b>@varshithofficial</b> with your Order ID or transfer proof.\n` +
+        `1. Tap <b>PURCHASE ACCESS</b> to choose your plan and complete payment.\n` +
+        `2. Contact Admin <b>@qoxking</b> with your Order ID or transfer proof.\n` +
         `3. Admin confirms payment on bank statement and issues your official <b>User ID & Password</b>.\n` +
         `4. Unlock your private <b>Software Terminal Link</b> immediately!\n\n` +
-        `<i>Need help? Type /contact or message @varshithofficial</i>`, {
+        `<i>Need help? Type /contact or message @qoxking</i>`, {
         parse_mode: "HTML",
         reply_markup: keyboard,
     });
@@ -301,9 +302,9 @@ bot.command("terminal", async (ctx) => {
     }
     const terminalAppUrl = `${webAppUrl}?app=terminal`;
     const keyboard = new grammy_1.InlineKeyboard()
-        .webApp("⚡ Launch Software Terminal", terminalAppUrl)
+        .webApp("🔥 ⚡ LAUNCH AI SOFTWARE TERMINAL 🚀", terminalAppUrl)
         .row()
-        .url("Open in Web Browser", terminalAppUrl);
+        .url("🌐 💎 OPEN IN WEB BROWSER ↗️", terminalAppUrl);
     await ctx.reply(`<b>QOX SOFTWARE TERMINAL (AUTHORIZED ACCESS)</b>\n\n` +
         `Dedicated AI Candlestick Chart Scanner & Precision Predictor.\n` +
         `Tap below to open your terminal and log in:`, {
@@ -314,17 +315,17 @@ bot.command("terminal", async (ctx) => {
 // Command: /plans
 bot.command(["plans", "shop", "buy"], async (ctx) => {
     const storeAppUrl = webAppUrl;
-    const keyboard = new grammy_1.InlineKeyboard().webApp("🛒 Open QOX Plans", storeAppUrl);
+    const keyboard = new grammy_1.InlineKeyboard().webApp("🟢 🛒 REVIEW ACCESS PLANS & BUY 💎", storeAppUrl);
     await ctx.reply("Select an option to review access plans & purchase:", {
         reply_markup: keyboard,
     });
 });
 // Command: /contact
 bot.command("contact", async (ctx) => {
-    const keyboard = new grammy_1.InlineKeyboard().url("💬 Message Admin (@varshithofficial)", "https://t.me/varshithofficial");
+    const keyboard = new grammy_1.InlineKeyboard().url("👑 💬 Message Admin (@qoxking) ⚡", "https://t.me/qoxking");
     await ctx.reply("<b>QOX OFFICIAL SUPPORT & VERIFICATION DESK</b>\n\n" +
         "For software activation, payment approvals, or login assistance:\n" +
-        "• <b>Approval Admin:</b> @varshithofficial\n" +
+        "• <b>Approval Admin:</b> @qoxking\n" +
         "• Tap the button below to message our admin directly on Telegram\n" +
         "• Type /myaccount to retrieve your issued credentials", { parse_mode: "HTML", reply_markup: keyboard });
 });
@@ -343,7 +344,7 @@ bot.command(["myaccount", "mykey", "credentials", "login", "account"], async (ct
             "2. Complete payment verification.\n" +
             "3. Your unique User ID & Password will be generated immediately and sent to you here.", {
             parse_mode: "HTML",
-            reply_markup: new grammy_1.InlineKeyboard().webApp("Get QOX Account", webAppUrl),
+            reply_markup: new grammy_1.InlineKeyboard().webApp("🟢 🛒 Purchase Access Plan 💎", webAppUrl),
         });
         return;
     }
@@ -359,9 +360,9 @@ bot.command(["myaccount", "mykey", "credentials", "login", "account"], async (ct
     text += `💡 <b>Want to customize your password?</b>\nType: <code>/setpassword &lt;new_password&gt;</code>`;
     const terminalAppUrl = `${webAppUrl}?app=terminal`;
     const keyboard = new grammy_1.InlineKeyboard()
-        .webApp("Launch Software Terminal", terminalAppUrl)
+        .webApp("🔥 ⚡ LAUNCH SOFTWARE TERMINAL 🚀", terminalAppUrl)
         .row()
-        .url("Open in Web Browser", terminalAppUrl);
+        .url("🌐 💎 OPEN IN WEB BROWSER ↗️", terminalAppUrl);
     await ctx.reply(text, { parse_mode: "HTML", reply_markup: keyboard });
 });
 // Command: /setpassword or /changepassword
@@ -863,9 +864,9 @@ bot.callbackQuery(/^approve_upi:(.+)$/, async (ctx) => {
             `<i>Tip: Retrieve your login details anytime by typing /myaccount</i>`;
         const terminalAppUrl = `${webAppUrl}?app=terminal`;
         const launchKeyboard = new grammy_1.InlineKeyboard()
-            .webApp("⚡ Launch Software Terminal", terminalAppUrl)
+            .webApp("🔥 ⚡ LAUNCH AI SOFTWARE TERMINAL 🚀", terminalAppUrl)
             .row()
-            .url("Open in Web Browser", terminalAppUrl);
+            .url("🌐 💎 OPEN IN WEB BROWSER ↗️", terminalAppUrl);
         try {
             await bot.api.sendMessage(order.telegramId, buyerCredentialsMsg, {
                 parse_mode: "HTML",
@@ -954,9 +955,9 @@ bot.callbackQuery(/^approve_query:(.+)$/, async (ctx) => {
             `3. Upload your chart screenshot and receive AI signals!\n\n` +
             `<i>Tip: Retrieve your login details anytime by typing /myaccount</i>`;
         const launchKeyboard = new grammy_1.InlineKeyboard()
-            .webApp("⚡ Launch Software Terminal", terminalAppUrl)
+            .webApp("🔥 ⚡ LAUNCH AI SOFTWARE TERMINAL 🚀", terminalAppUrl)
             .row()
-            .url("Open in Web Browser", terminalAppUrl);
+            .url("🌐 💎 OPEN IN WEB BROWSER ↗️", terminalAppUrl);
         try {
             await bot.api.sendMessage(buyerId, buyerCredentialsMsg, {
                 parse_mode: "HTML",

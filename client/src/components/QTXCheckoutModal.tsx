@@ -283,7 +283,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
   const handleOpenAdminChat = () => {
     haptic("light");
     sounds.playClick();
-    const link = "https://t.me/varshithofficial";
+    const link = "https://t.me/qoxking";
     if (tg?.openTelegramLink) {
       tg.openTelegramLink(link);
     } else {
@@ -306,7 +306,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
       `Method: ${selectedMethod.toUpperCase()}\n` +
       `Reference / UTR / TxID: ${utr || txId}\n` +
       `Trader: @${user?.username || "Trader"}\n` +
-      `Official Admin: @varshithofficial\n` +
+      `Official Admin: @qoxking\n` +
       `Request: I have completed the payment. Please verify my credit and approve my QOX Software Terminal User ID & Password.`;
     navigator.clipboard.writeText(text);
     setCopiedQuery(true);
@@ -1675,7 +1675,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
             </h3>
 
             <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: "0 auto 12px", maxWidth: "340px", lineHeight: 1.45 }}>
-              Please message Admin <b style={{ color: "#00ff88" }}>@varshithofficial</b> directly on Telegram with your Order ID to get your Software Terminal User ID & Password approved.
+              Please message Admin <b style={{ color: "#00ff88" }}>@qoxking</b> directly on Telegram with your Order ID to get your Software Terminal User ID & Password approved.
             </p>
 
             {/* Official Admin Contact Card */}
@@ -1695,7 +1695,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
                   Official Approval Admin
                 </div>
                 <div style={{ fontSize: "0.95rem", color: "#ffffff", fontWeight: 900, fontFamily: "var(--font-mono)", marginTop: "2px" }}>
-                  @varshithofficial
+                  @qoxking
                 </div>
               </div>
               <button
@@ -1821,7 +1821,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
                 }}
               >
                 <Send size={15} />
-                <span>MESSAGE ADMIN (@varshithofficial)</span>
+                <span>MESSAGE ADMIN (@qoxking)</span>
               </button>
 
               {/* Secondary: 1-Tap Raise Query */}

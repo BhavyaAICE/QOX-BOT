@@ -39,9 +39,9 @@ export const ReviewsAndFeedback: React.FC = () => {
   const handleOpenContact = () => {
     haptic("light");
     if (tg?.openTelegramLink) {
-      tg.openTelegramLink("https://t.me/TEAMQTX");
+      tg.openTelegramLink("https://t.me/qoxking");
     } else {
-      window.open("https://t.me/TEAMQTX", "_blank");
+      window.open("https://t.me/qoxking", "_blank");
     }
   };
 
@@ -75,16 +75,27 @@ export const ReviewsAndFeedback: React.FC = () => {
         <div style={{ display: "flex", justifyContent: "center", margin: "16px 0 28px" }}>
           <button
             onClick={handleOpenContact}
-            className="btn-emerald-outline"
             style={{
-              padding: "12px 36px",
-              fontSize: "0.84rem",
-              letterSpacing: "0.14em",
-              minWidth: "180px",
+              padding: "13px 32px",
+              fontSize: "0.86rem",
+              letterSpacing: "0.1em",
+              minWidth: "220px",
+              background: "linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.2) 100%)",
+              border: "1.5px solid rgba(0, 255, 136, 0.5)",
+              borderRadius: "100px",
+              color: "#ffffff",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 800,
+              fontFamily: "var(--font-display)",
+              boxShadow: "0 8px 25px rgba(0, 255, 136, 0.2), inset 0 0 15px rgba(0, 255, 136, 0.1)",
+              transition: "all 0.2s ease",
             }}
           >
-            <MessageCircle size={15} style={{ marginRight: "8px", opacity: 0.8 }} />
-            CONTACT US
+            <MessageCircle size={16} color="#00ff88" style={{ marginRight: "8px" }} />
+            <span>CONTACT US (@qoxking)</span>
           </button>
         </div>
       </AnimatedReveal>
