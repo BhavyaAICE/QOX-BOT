@@ -5,6 +5,7 @@ export interface PurchaseOrderRecord {
   orderId: string;
   telegramId?: number;
   telegramUsername?: string;
+  firstName?: string;
   planTag: string;
   planId: string;
   durationDays: number;

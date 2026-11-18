@@ -122,13 +122,21 @@ async function notifyUpiSubmission(order) {
         .text("❌ Reject", `reject_upi:${order.orderId}`);
     const durText = order.durationDays === -1 ? "Permanent Lifetime" : `${order.durationDays} Days`;
     const inrDisplay = (order.amountInr ?? (order.planTag === "INITIATE" ? 20000 : order.planTag === "ENLIGHTENED" ? 30000 : order.priceUsdt * 100)).toLocaleString();
+    const regUser = order.telegramId ? userRegistry_1.userRegistry.getUser(order.telegramId) : undefined;
+    const fullName = order.firstName || regUser?.firstName || "";
+    const rawUsername = (order.telegramUsername || regUser?.username || "").replace(/^@/, "");
+    const traderDisplay = fullName && rawUsername
+        ? `${fullName} (@${rawUsername})`
+        : rawUsername
+            ? `@${rawUsername}`
+            : fullName || "Anonymous Trader";
     const ownerMsg = `<b>🔔 NEW UPI PAYMENT SUBMITTED</b>\n` +
         `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
         `<b>Order ID:</b> <code>#${order.orderId}</code>\n` +
         `<b>Plan:</b> <b>${order.planTag}</b> (${durText})\n` +
         `<b>Amount:</b> <b>₹${inrDisplay} INR</b> ($${order.priceUsdt} USDT)\n` +
         `<b>12-Digit UTR:</b> <code>${order.utr}</code>\n` +
-        `<b>Trader:</b> @${order.telegramUsername || "Anonymous"} (ID: <code>${order.telegramId || "N/A"}</code>)\n` +
+        `<b>Trader:</b> ${traderDisplay} (ID: <code>${order.telegramId || "N/A"}</code>)\n` +
         `<b>Time:</b> ${new Date(order.submittedAt).toLocaleTimeString()}\n\n` +
         `<i>Please verify the incoming bank credit of ₹${inrDisplay} with UTR <code>${order.utr}</code> on your bank/UPI app, then tap below:</i>`;
     // Dispatch to all 3 bot owners
@@ -164,6 +172,14 @@ async function notifyQueryRaised(query) {
     const ownerKeyboard = new grammy_1.InlineKeyboard()
         .text("Approve & Issue Login", `approve_query:${query.orderId}`).success()
         .text("Reject", `reject_query:${query.orderId}`).danger();
+    const regUser = query.telegramId ? userRegistry_1.userRegistry.getUser(query.telegramId) : undefined;
+    const fullName = query.firstName || regUser?.firstName || "";
+    const rawUsername = (query.telegramUsername || regUser?.username || "").replace(/^@/, "");
+    const traderDisplay = fullName && rawUsername
+        ? `${fullName} (@${rawUsername})`
+        : rawUsername
+            ? `@${rawUsername}`
+            : fullName || "Anonymous Trader";
     const ownerMsg = `<b>NEW PURCHASE QUERY RAISED BY TRADER</b>\n` +
         `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
         `<b>Order ID:</b> <code>#${query.orderId}</code>\n` +
@@ -171,7 +187,7 @@ async function notifyQueryRaised(query) {
         `<b>Amount:</b> <b>${query.amountText}</b>\n` +
         `<b>Method:</b> ${query.paymentMethod}\n` +
         `<b>Reference (UTR/Tx):</b> <code>${query.txRef}</code>\n` +
-        `<b>Trader:</b> @${query.telegramUsername || "Anonymous"} (ID: <code>${query.telegramId || "N/A"}</code>)\n` +
+        `<b>Trader:</b> ${traderDisplay} (ID: <code>${query.telegramId || "N/A"}</code>)\n` +
         `<b>Time:</b> ${new Date().toLocaleTimeString()}\n\n` +
         `<i>Trader has raised this activation query after purchasing. Please confirm the credit on your bank statement/wallet and tap below:</i>`;
     // Dispatch to all 3 bot owners

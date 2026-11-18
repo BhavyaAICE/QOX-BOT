@@ -270,7 +270,8 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
           paymentMethod: selectedMethod.toUpperCase(),
           txRef: utr || txId,
           telegramId: user?.id,
-          telegramUsername: user?.username || user?.first_name || "Valued Trader",
+          telegramUsername: user?.username || "",
+          telegramFirstName: [user?.first_name, user?.last_name].filter(Boolean).join(" ") || user?.first_name || "",
         }),
       });
       sounds.playSuccess();
@@ -341,7 +342,8 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
         body: JSON.stringify({
           orderId: generatedOrderId,
           telegramId: user?.id,
-          telegramUsername: user?.username || user?.first_name || "Valued Trader",
+          telegramUsername: user?.username || "",
+          telegramFirstName: [user?.first_name, user?.last_name].filter(Boolean).join(" ") || user?.first_name || "",
           planTag: plan.tag,
           planId: plan.id,
           durationDays,
@@ -471,7 +473,8 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
         body: JSON.stringify({
           orderId: generatedOrderId,
           telegramId: user?.id,
-          telegramUsername: user?.username || user?.first_name || "Valued Trader",
+          telegramUsername: user?.username || "",
+          telegramFirstName: [user?.first_name, user?.last_name].filter(Boolean).join(" ") || user?.first_name || "",
           planTag: plan.tag,
           planId: plan.id,
           durationDays,

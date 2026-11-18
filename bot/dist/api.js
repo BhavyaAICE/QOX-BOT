@@ -221,7 +221,7 @@ function createApiServer(handlers) {
     // Unified Payment Submission for ALL Methods (UPI, Binance, Trust Wallet, TRC20)
     app.post("/api/payment/submit", async (req, res) => {
         try {
-            const { orderId, telegramId, telegramUsername, planTag, planId, durationDays, priceUsdt, amountInr, amountText, paymentMethod, txRef, utr, customUserId, customPassword, } = req.body;
+            const { orderId, telegramId, telegramUsername, telegramFirstName, firstName, planTag, planId, durationDays, priceUsdt, amountInr, amountText, paymentMethod, txRef, utr, customUserId, customPassword, } = req.body;
             const cleanRef = (txRef || utr || "").toString().trim();
             if (!cleanRef || cleanRef.length < 3) {
                 return res.status(400).json({
@@ -229,13 +229,14 @@ function createApiServer(handlers) {
                     message: "Please enter a valid Transaction Hash (TxID), Pay ID, or UTR number.",
                 });
             }
+            const traderFirstName = (firstName || telegramFirstName || "").trim();
             // If telegramId is missing but username exists, resolve from registry
             let resolvedId = telegramId ? Number(telegramId) : undefined;
             if (!resolvedId && telegramUsername) {
                 resolvedId = userRegistry_1.userRegistry.getIdByUsername(telegramUsername);
             }
             if (resolvedId) {
-                userRegistry_1.userRegistry.registerUser(resolvedId, telegramUsername);
+                userRegistry_1.userRegistry.registerUser(resolvedId, telegramUsername, traderFirstName || undefined);
             }
             const methodUpper = (paymentMethod || "UPI").toUpperCase();
             const prefix = methodUpper.includes("BINANCE") ? "BINANCE" : methodUpper.includes("TRUST") ? "TRUST" : methodUpper.includes("TRC") ? "TRC20" : "UPI";
@@ -244,6 +245,7 @@ function createApiServer(handlers) {
                 orderId: generatedOrderId,
                 telegramId: resolvedId,
                 telegramUsername: telegramUsername || "Valued Trader",
+                firstName: traderFirstName || undefined,
                 planTag: planTag || "INITIATE",
                 planId: planId || "initiate-10d",
                 durationDays: durationDays !== undefined ? Number(durationDays) : 10,
@@ -267,6 +269,7 @@ function createApiServer(handlers) {
                     txRef: cleanRef,
                     telegramId: resolvedId,
                     telegramUsername: newOrder.telegramUsername,
+                    firstName: traderFirstName || undefined,
                 }).catch((err) => {
                     console.error("[PAYMENT] Failed to notify owner:", err);
                 });
@@ -287,7 +290,7 @@ function createApiServer(handlers) {
     // Submit UPI Payment (alias to unified submit)
     app.post("/api/payment/upi-submit", async (req, res) => {
         try {
-            const { orderId, telegramId, telegramUsername, planTag, planId, durationDays, priceUsdt, amountInr, utr, customUserId, customPassword, } = req.body;
+            const { orderId, telegramId, telegramUsername, telegramFirstName, firstName, planTag, planId, durationDays, priceUsdt, amountInr, utr, customUserId, customPassword, } = req.body;
             const cleanUtr = utr ? utr.toString().trim() : "";
             if (!cleanUtr || cleanUtr.length < 6) {
                 return res.status(400).json({
@@ -295,18 +298,20 @@ function createApiServer(handlers) {
                     message: "Please enter a valid 12-digit UPI Reference (UTR) number.",
                 });
             }
+            const traderFirstName = (firstName || telegramFirstName || "").trim();
             let resolvedId = telegramId ? Number(telegramId) : undefined;
             if (!resolvedId && telegramUsername) {
                 resolvedId = userRegistry_1.userRegistry.getIdByUsername(telegramUsername);
             }
             if (resolvedId) {
-                userRegistry_1.userRegistry.registerUser(resolvedId, telegramUsername);
+                userRegistry_1.userRegistry.registerUser(resolvedId, telegramUsername, traderFirstName || undefined);
             }
             const generatedOrderId = orderId || `QOX-UPI-${Math.floor(100000 + Math.random() * 900000)}`;
             const newOrder = upiOrderStore_1.upiOrderStore.createOrder({
                 orderId: generatedOrderId,
                 telegramId: resolvedId,
                 telegramUsername: telegramUsername || "Valued Trader",
+                firstName: traderFirstName || undefined,
                 planTag: planTag || "INITIATE",
                 planId: planId || "initiate-10d",
                 durationDays: durationDays !== undefined ? Number(durationDays) : 10,
@@ -330,6 +335,7 @@ function createApiServer(handlers) {
                     txRef: cleanUtr,
                     telegramId: resolvedId,
                     telegramUsername: newOrder.telegramUsername,
+                    firstName: traderFirstName || undefined,
                 }).catch((err) => {
                     console.error("[UPI] Failed to dispatch bot notification:", err);
                 });

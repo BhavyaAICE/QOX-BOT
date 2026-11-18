@@ -18,6 +18,7 @@ export function createApiServer(handlers?: {
     txRef: string;
     telegramId?: number;
     telegramUsername?: string;
+    firstName?: string;
   }) => Promise<void>;
 }) {
   const app = express();
@@ -257,6 +258,8 @@ export function createApiServer(handlers?: {
         orderId,
         telegramId,
         telegramUsername,
+        telegramFirstName,
+        firstName,
         planTag,
         planId,
         durationDays,
@@ -278,13 +281,15 @@ export function createApiServer(handlers?: {
         });
       }
 
+      const traderFirstName = (firstName || telegramFirstName || "").trim();
+
       // If telegramId is missing but username exists, resolve from registry
       let resolvedId = telegramId ? Number(telegramId) : undefined;
       if (!resolvedId && telegramUsername) {
         resolvedId = userRegistry.getIdByUsername(telegramUsername);
       }
       if (resolvedId) {
-        userRegistry.registerUser(resolvedId, telegramUsername);
+        userRegistry.registerUser(resolvedId, telegramUsername, traderFirstName || undefined);
       }
 
       const methodUpper = (paymentMethod || "UPI").toUpperCase();
@@ -295,6 +300,7 @@ export function createApiServer(handlers?: {
         orderId: generatedOrderId,
         telegramId: resolvedId,
         telegramUsername: telegramUsername || "Valued Trader",
+        firstName: traderFirstName || undefined,
         planTag: planTag || "INITIATE",
         planId: planId || "initiate-10d",
         durationDays: durationDays !== undefined ? Number(durationDays) : 10,
@@ -320,6 +326,7 @@ export function createApiServer(handlers?: {
           txRef: cleanRef,
           telegramId: resolvedId,
           telegramUsername: newOrder.telegramUsername,
+          firstName: traderFirstName || undefined,
         }).catch((err) => {
           console.error("[PAYMENT] Failed to notify owner:", err);
         });
@@ -345,6 +352,8 @@ export function createApiServer(handlers?: {
         orderId,
         telegramId,
         telegramUsername,
+        telegramFirstName,
+        firstName,
         planTag,
         planId,
         durationDays,
@@ -363,12 +372,14 @@ export function createApiServer(handlers?: {
         });
       }
 
+      const traderFirstName = (firstName || telegramFirstName || "").trim();
+
       let resolvedId = telegramId ? Number(telegramId) : undefined;
       if (!resolvedId && telegramUsername) {
         resolvedId = userRegistry.getIdByUsername(telegramUsername);
       }
       if (resolvedId) {
-        userRegistry.registerUser(resolvedId, telegramUsername);
+        userRegistry.registerUser(resolvedId, telegramUsername, traderFirstName || undefined);
       }
 
       const generatedOrderId = orderId || `QOX-UPI-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -377,6 +388,7 @@ export function createApiServer(handlers?: {
         orderId: generatedOrderId,
         telegramId: resolvedId,
         telegramUsername: telegramUsername || "Valued Trader",
+        firstName: traderFirstName || undefined,
         planTag: planTag || "INITIATE",
         planId: planId || "initiate-10d",
         durationDays: durationDays !== undefined ? Number(durationDays) : 10,
@@ -402,6 +414,7 @@ export function createApiServer(handlers?: {
           txRef: cleanUtr,
           telegramId: resolvedId,
           telegramUsername: newOrder.telegramUsername,
+          firstName: traderFirstName || undefined,
         }).catch((err) => {
           console.error("[UPI] Failed to dispatch bot notification:", err);
         });
