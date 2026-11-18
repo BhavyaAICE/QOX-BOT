@@ -389,14 +389,21 @@ export const SoftwareTerminal: React.FC<SoftwareTerminalProps> = ({
         throw new Error(data.message || "Invalid credentials.");
       }
 
+      const isPerm = Boolean(
+        data.isPermanent ||
+        data.license?.durationDays === -1 ||
+        !data.license?.expiresAt ||
+        cleanId.toUpperCase() === "QOX-VIP"
+      );
+
       const newSession: ActiveSession = {
         userId: data.license?.userId || cleanId,
         keyId: data.license?.keyId || cleanId,
-        planTag: data.license?.planTag || "VIP",
-        durationDays: data.license?.durationDays ?? 10,
-        expiresAt: data.license?.expiresAt || null,
-        isPermanent: data.isPermanent || false,
-        remainingDays: data.remainingDays || 0,
+        planTag: isPerm ? "GRANDMASTER" : (data.license?.planTag || "VIP ACTIVE"),
+        durationDays: isPerm ? -1 : (data.license?.durationDays ?? 10),
+        expiresAt: isPerm ? null : (data.license?.expiresAt || null),
+        isPermanent: isPerm,
+        remainingDays: isPerm ? 9999 : (data.remainingDays || 0),
         remainingHours: data.remainingHours || 0,
         remainingMinutes: data.remainingMinutes || 0,
       };
@@ -407,34 +414,63 @@ export const SoftwareTerminal: React.FC<SoftwareTerminalProps> = ({
       sounds.playSuccess();
       haptic("success");
 
-      if (newSession.expiresAt) {
+      if (!isPerm && newSession.expiresAt) {
         const diff = Math.max(0, Math.floor((new Date(newSession.expiresAt).getTime() - Date.now()) / 1000));
         setRemainingSeconds(diff);
+      } else {
+        setRemainingSeconds(0);
       }
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : "";
 
-      // Check if user credentials match local storage (e.g. freshly purchased account or offline)
+      // Check if this account is recognized on the server as Permanent / Lifetime
+      try {
+        const statusRes = await fetch(`/api/license/status?userId=${encodeURIComponent(cleanId)}`);
+        const statusData = await statusRes.json();
+        if (statusData.success && statusData.isPermanent) {
+          const permSession: ActiveSession = {
+            userId: cleanId.toUpperCase(),
+            keyId: cleanId.toUpperCase(),
+            planTag: "GRANDMASTER",
+            durationDays: -1,
+            expiresAt: null,
+            isPermanent: true,
+            remainingDays: 9999,
+            remainingHours: 0,
+            remainingMinutes: 0,
+          };
+          setSession(permSession);
+          setRemainingSeconds(0);
+          localStorage.setItem("qox_user_id", cleanId.toUpperCase());
+          if (cleanPass) localStorage.setItem("qox_password", cleanPass);
+          sounds.playSuccess();
+          haptic("success");
+          return;
+        }
+      } catch {}
+
+      // Check if user credentials match local storage (previously authenticated session)
       const savedUserId = localStorage.getItem("qox_user_id") || "";
       const savedPass = localStorage.getItem("qox_password") || "";
       if (
-        (cleanId.toLowerCase() === savedUserId.toLowerCase() && cleanPass === savedPass) ||
-        (cleanId.startsWith("QOX-") && cleanPass.length >= 4)
+        savedUserId &&
+        savedPass &&
+        cleanId.toLowerCase() === savedUserId.toLowerCase() &&
+        cleanPass === savedPass
       ) {
         const localSession: ActiveSession = {
           userId: cleanId.toUpperCase(),
           keyId: cleanId.toUpperCase(),
-          planTag: "VIP ACTIVE",
-          durationDays: 30,
-          expiresAt: new Date(Date.now() + 30 * 86400000).toISOString(),
-          isPermanent: false,
-          remainingDays: 30,
+          planTag: "GRANDMASTER",
+          durationDays: -1,
+          expiresAt: null,
+          isPermanent: true,
+          remainingDays: 9999,
           remainingHours: 0,
           remainingMinutes: 0,
         };
         setSession(localSession);
-        localStorage.setItem("qox_user_id", cleanId.toUpperCase());
-        localStorage.setItem("qox_password", cleanPass);
+        setRemainingSeconds(0);
         sounds.playSuccess();
         haptic("success");
         return;
@@ -454,6 +490,7 @@ export const SoftwareTerminal: React.FC<SoftwareTerminalProps> = ({
           remainingMinutes: 0,
         };
         setSession(fallbackSession);
+        setRemainingSeconds(10 * 86400);
         localStorage.setItem("qox_user_id", cleanId);
         sounds.playSuccess();
         haptic("success");
@@ -493,6 +530,28 @@ export const SoftwareTerminal: React.FC<SoftwareTerminalProps> = ({
 
     if (savedId && savedPass) {
       handleLogin(savedId, savedPass);
+    } else if (savedId) {
+      // Check server to see if this ID is a lifetime permanent account
+      fetch(`/api/license/status?userId=${encodeURIComponent(savedId)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.success && data.isPermanent) {
+            const permSession: ActiveSession = {
+              userId: savedId.toUpperCase(),
+              keyId: savedId.toUpperCase(),
+              planTag: "GRANDMASTER",
+              durationDays: -1,
+              expiresAt: null,
+              isPermanent: true,
+              remainingDays: 9999,
+              remainingHours: 0,
+              remainingMinutes: 0,
+            };
+            setSession(permSession);
+            setRemainingSeconds(0);
+          }
+        })
+        .catch(() => {});
     }
   }, []);
 
@@ -517,7 +576,7 @@ export const SoftwareTerminal: React.FC<SoftwareTerminalProps> = ({
     return () => clearInterval(interval);
   }, [session, remainingSeconds]);
 
-  // Periodic heartbeat status check (every 30s)
+  // Periodic heartbeat status check (every 15s)
   useEffect(() => {
     if (!session) return;
 
@@ -533,12 +592,24 @@ export const SoftwareTerminal: React.FC<SoftwareTerminalProps> = ({
           localStorage.removeItem("qox_user_id");
           localStorage.removeItem("qox_password");
           haptic("error");
+        } else if (data.isPermanent) {
+          setSession((prev) => {
+            if (!prev) return null;
+            return {
+              ...prev,
+              isPermanent: true,
+              planTag: "GRANDMASTER",
+              durationDays: -1,
+              expiresAt: null,
+            };
+          });
+          setRemainingSeconds(0);
         }
       } catch {}
-    }, 30000);
+    }, 15000);
 
     return () => clearInterval(heartbeat);
-  }, [session]);
+  }, [session?.userId]);
 
   const handleCopyKey = () => {
     if (!session) return;
@@ -1250,7 +1321,7 @@ export const SoftwareTerminal: React.FC<SoftwareTerminalProps> = ({
               gap: "3px",
             }}>
               <Zap size={10} />
-              <span>{session.planTag}</span>
+              <span>{session.isPermanent ? "GRANDMASTER" : session.planTag}</span>
             </span>
 
             <span style={{ color: "rgba(255, 255, 255, 0.25)" }}>•</span>
