@@ -9,17 +9,14 @@ import {
   Copy,
   Check,
   CheckCircle2,
-  Shield,
   Loader2,
   ShieldCheck,
-  QrCode as QrIcon,
   ExternalLink,
   AlertCircle,
   Terminal,
   MessageSquare,
   Send,
 } from "lucide-react";
-import QRCode from "qrcode";
 import confetti from "canvas-confetti";
 import type { QTXPlan } from "../data/qtxData";
 import { PAYMENT_CONFIG, getPlanInrAmount } from "../data/qtxData";
@@ -30,6 +27,8 @@ import binanceQrImg from "../assets/binance_bep20_qr.jpg";
 import trustQrImg from "../assets/trust_wallet_qr.jpg";
 import binanceQrSquareImg from "../assets/binance_qr_square.jpg";
 import trustQrSquareImg from "../assets/trust_qr_square.jpg";
+import bharatpeQrImg from "../assets/bharatpe_upi_qr.jpg";
+import upiQrSquareImg from "../assets/upi_qr_square.jpg";
 
 interface GatewayStatus {
   key: "upi" | "binance" | "trust";
@@ -103,7 +102,6 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
   const [copied, setCopied] = useState(false);
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [isSubmittingUpi, setIsSubmittingUpi] = useState(false);
-  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [orderId, setOrderId] = useState("");
   const [accountUserId, setAccountUserId] = useState("");
   const [accountPassword, setAccountPassword] = useState("");
@@ -150,28 +148,6 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
     selectedMethod === "trust" || selectedMethod === "trc20"
       ? PAYMENT_CONFIG.usdtTrc20Address
       : PAYMENT_CONFIG.usdtBep20Address;
-
-  const inrAmount = plan ? getPlanInrAmount(plan) : 0;
-  const upiQrString = `upi://pay?pa=${encodeURIComponent(PAYMENT_CONFIG.upiId)}&pn=${encodeURIComponent(PAYMENT_CONFIG.upiName)}&am=${inrAmount}&cu=INR&tn=${encodeURIComponent(`QOX_${plan?.tag || "ACCESS"}`)}`;
-
-  const currentPayload = selectedMethod === "upi" ? upiQrString : currentAddress;
-
-  // Generate QR Code dynamically with High Error Correction ('H') to ensure scanability with center logo
-  useEffect(() => {
-    if (!plan) return;
-
-    QRCode.toDataURL(currentPayload, {
-      margin: 1,
-      width: 280,
-      errorCorrectionLevel: "H",
-      color: {
-        dark: "#000000",
-        light: "#ffffff",
-      },
-    })
-      .then((url) => setQrCodeUrl(url))
-      .catch((err) => console.error("QR Code Error:", err));
-  }, [plan, currentPayload]);
 
   // Polling for UPI order approval
   useEffect(() => {
@@ -1076,51 +1052,62 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
                   </span>
                 </div>
 
-                {/* Dynamic UPI QR Code */}
-                <div style={{
-                  position: "relative",
-                  width: "170px",
-                  height: "170px",
-                  margin: "0 auto 10px",
-                  backgroundColor: "#ffffff",
-                  borderRadius: "14px",
-                  padding: "8px",
-                  boxSizing: "border-box",
-                  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.8)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}>
-                  {qrCodeUrl ? (
-                    <img
-                      src={qrCodeUrl}
-                      alt="UPI Payment QR Code"
-                      style={{ width: "100%", height: "100%", display: "block" }}
-                    />
-                  ) : (
-                    <div style={{ color: "#000", display: "flex", alignItems: "center", gap: "6px" }}>
-                      <QrIcon size={24} /> Generating QR...
-                    </div>
-                  )}
-
-                  {/* Centered Watermark Shield / Icon */}
-                  <div style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: "30px",
-                    height: "30px",
-                    borderRadius: "7px",
+                {/* Official BharatPe UPI QR Code */}
+                <div
+                  onClick={() => {
+                    sounds.playClick();
+                    haptic("light");
+                    setShowFullQrCard(true);
+                  }}
+                  title="Click to view full official BharatPe slip"
+                  style={{
+                    position: "relative",
+                    width: "170px",
+                    height: "170px",
+                    margin: "0 auto 8px",
                     backgroundColor: "#ffffff",
-                    border: "2px solid #000000",
+                    borderRadius: "14px",
+                    padding: "8px",
+                    boxSizing: "border-box",
+                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(16, 185, 129, 0.2)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
-                  }}>
-                    <Shield size={18} color="#000000" fill="#000000" />
-                  </div>
+                    cursor: "pointer",
+                    overflow: "hidden",
+                  }}
+                >
+                  <img
+                    src={upiQrSquareImg}
+                    alt="BharatPe UPI Payment QR Code"
+                    style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", borderRadius: "8px" }}
+                  />
+                </div>
+
+                {/* View Full Card Button */}
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      haptic("light");
+                      setShowFullQrCard(true);
+                    }}
+                    style={{
+                      background: "rgba(255, 255, 255, 0.06)",
+                      border: "1px solid rgba(255, 255, 255, 0.14)",
+                      color: "#94a3b8",
+                      fontSize: "0.72rem",
+                      padding: "3px 12px",
+                      borderRadius: "100px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    🔍 Tap QR to enlarge official slip
+                  </button>
                 </div>
 
                 <p style={{
@@ -1238,7 +1225,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
                       textTransform: "uppercase",
                       fontWeight: 600,
                     }}>
-                      Official Store UPI ID
+                      Official BharatPe UPI ID (Payee: SATYAM RAJAK)
                     </div>
                     <div style={{
                       fontFamily: "var(--font-mono)",
@@ -2451,10 +2438,14 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
               marginBottom: "12px",
               textTransform: "uppercase",
             }}>
-              {selectedMethod === "trust" ? "TRX (TRON) OFFICIAL QR SLIP" : "BNB (BEP20) OFFICIAL QR SLIP"}
+              {selectedMethod === "upi"
+                ? "BHARATPE OFFICIAL UPI QR SLIP"
+                : selectedMethod === "trust"
+                ? "TRX (TRON) OFFICIAL QR SLIP"
+                : "BNB (BEP20) OFFICIAL QR SLIP"}
             </h3>
 
-            {/* Official SafePal Card Image */}
+            {/* Official SafePal / BharatPe Card Image */}
             <div style={{
               borderRadius: "12px",
               overflow: "hidden",
@@ -2463,7 +2454,7 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
               backgroundColor: "#ffffff",
             }}>
               <img
-                src={selectedMethod === "trust" ? trustQrImg : binanceQrImg}
+                src={selectedMethod === "upi" ? bharatpeQrImg : selectedMethod === "trust" ? trustQrImg : binanceQrImg}
                 alt="Official Deposit Slip"
                 style={{ width: "100%", display: "block", maxHeight: "60vh", objectFit: "contain" }}
               />
@@ -2472,11 +2463,13 @@ export const QTXCheckoutModal: React.FC<QTXCheckoutModalProps> = ({
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               <button
                 type="button"
-                onClick={handleCopyAddress}
+                onClick={selectedMethod === "upi" ? handleCopyUpiId : handleCopyAddress}
                 className="btn-emerald-solid"
                 style={{ width: "100%", padding: "11px", fontSize: "0.82rem" }}
               >
-                {copied ? "COPIED TO CLIPBOARD" : "COPY DEPOSIT ADDRESS"}
+                {selectedMethod === "upi"
+                  ? (copiedUpi ? "COPIED UPI ID" : "COPY BHARATPE UPI ID")
+                  : (copied ? "COPIED TO CLIPBOARD" : "COPY DEPOSIT ADDRESS")}
               </button>
               <button
                 type="button"

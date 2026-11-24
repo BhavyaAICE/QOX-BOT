@@ -76,8 +76,8 @@
     // Binance Pay ID
     binancePayId: "589214792",
     // UPI Configuration (Google Pay / PhonePe / Paytm / BHIM)
-    upiId: "qoxsoftware@okhdfcbank",
-    upiName: "QOX Software",
+    upiId: "BHARATPE2K0N0N9V0A50573@unitype",
+    upiName: "SATYAM RAJAK",
     usdToInrRate: 100, // Standard OTC exchange rate ($1 = ₹100)
     // Official Direct Quotex Server Gateway (Synchronized Broker Portal)
     quotexPortalUrl: "https://broker-qx.pro/sign-up/?lid=2421270",
